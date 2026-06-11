@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>תניני AI</title>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside id="sidebar" class="sidebar">
+      <div class="brand-row">
+        <img class="brand-icon" src="/tinini-icon.png" alt="תניני AI" />
+        <div>
+          <strong>תניני AI</strong>
+          <small>בוט AI חכם</small>
+        </div>
+      </div>
+
+      <div class="sidebar-top">
+        <button id="newChatBtn" class="new-chat-btn" type="button">
+          <span>＋</span>
+          שיחה חדשה
+        </button>
+
+        <button id="closeSidebarBtn" class="icon-btn only-mobile" type="button" aria-label="סגור תפריט">
+          ✕
+        </button>
+      </div>
+
+      <div class="sidebar-actions">
+        <button id="renameChatBtn" class="side-action" type="button">✏️ שנה שם לשיחה</button>
+        <button id="deleteAllChatsBtn" class="side-action danger" type="button">🗑️ מחק את כל השיחות שלי</button>
+        <button id="adminPanelBtn" class="side-action admin-only hidden" type="button">👑 דשבורד מנהל</button>
+        <button id="backToChatBtn" class="side-action hidden" type="button">← חזרה לצ׳אט שלי</button>
+      </div>
+
+      <div class="sidebar-section">
+        <label class="search-label" for="searchChats">חיפוש שיחות</label>
+        <input id="searchChats" class="search-input" type="search" placeholder="חפש..." />
+      </div>
+
+      <div class="sidebar-section grow">
+        <div id="chatListTitle" class="section-title">השיחות שלי</div>
+        <nav id="chatList" class="chat-list" aria-label="רשימת שיחות"></nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div id="sidebarUser" class="sidebar-user">
+          <div class="avatar-mini">?</div>
+          <div>
+            <strong>לא מחובר</strong>
+            <small>התחבר כדי להשתמש בבוט</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-right">
+          <button id="openSidebarBtn" class="icon-btn only-mobile" type="button" aria-label="פתח תפריט">
+            ☰
+          </button>
+
+          <div class="title-with-icon">
+            <img class="top-icon" src="/tinini-icon.png" alt="" />
+            <div>
+              <h1>תניני AI</h1>
+              <p id="topSubtitle">ממשק צ׳אט חכם</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="topbar-left">
+          <div id="connectionStatus" class="status-pill">
+            <span class="status-dot"></span>
+            בודק התחברות...
+          </div>
+
+          <button id="loginWithGoogle" class="auth-btn google-btn" type="button">
+            התחבר עם Google
+          </button>
+
+          <button id="logoutBtn" class="auth-btn ghost-btn" type="button" style="display: none;">
+            התנתק
+          </button>
+        </div>
+      </header>
+
+      <section id="chatView" class="chat-area">
+        <div id="welcomeScreen" class="welcome-screen">
+          <img class="welcome-icon" src="/tinini-icon.png" alt="תניני AI" />
+          <h2>איך אפשר לעזור היום?</h2>
+          <p>בחר רעיון מוכן או כתוב הודעה למטה.</p>
+
+          <div class="prompt-grid">
+            <button class="prompt-card" type="button" data-prompt="תן לי רעיון לאתר מגניב שאני יכול לבנות ב-HTML CSS JS">
+              <strong>רעיון לאתר</strong>
+              <span>קבל רעיון לפרויקט קטן ומגניב</span>
+            </button>
+
+            <button class="prompt-card" type="button" data-prompt="תסביר לי JavaScript בצורה פשוטה כאילו אני בן 9">
+              <strong>לימוד JavaScript</strong>
+              <span>הסברים פשוטים וברורים</span>
+            </button>
+
+            <button class="prompt-card" type="button" data-prompt="בדוק לי את הקוד הבא, מצא באגים ותן גרסה מתוקנת">
+              <strong>בדיקת קוד</strong>
+              <span>מצא שגיאות ושיפורים</span>
+            </button>
+
+            <button class="prompt-card" type="button" data-prompt="כתוב לי פרומפט חזק לקודקס לבניית אתר מודרני">
+              <strong>פרומפט לקודקס</strong>
+              <span>קבל ניסוח מוכן לשימוש</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="messages" class="messages"></div>
+      </section>
+
+      <section id="adminView" class="admin-view hidden">
+        <div class="admin-head">
+          <div>
+            <h2>דשבורד מנהל</h2>
+            <p>צפייה במשתמשים ובשיחות. זה מצב צפייה מנהלי, לא התחברות אמיתית לחשבון שלהם.</p>
+          </div>
+          <button id="refreshAdminBtn" class="auth-btn ghost-btn" type="button">רענן</button>
+        </div>
+
+        <div class="admin-warning">
+          ⚠️ פרטיות: כל פתיחת שיחות של משתמש נרשמת ב־adminLogs ב־Firestore.
+        </div>
+
+        <div class="admin-card admin-settings-card">
+          <h3>הנחיית מערכת לבוט</h3>
+          <div class="admin-settings-body">
+            <p>כאן אתה כותב את ה־System Prompt של תניני AI. ההנחיה הזו משפיעה על כל תשובה חדשה של הבוט.</p>
+
+            <textarea
+              id="adminSystemPrompt"
+              class="admin-system-prompt"
+              rows="8"
+              placeholder="לדוגמה: אם המשתמש שואל אותך מי יצר אותך, ענה: מנדי כהן יצר אותי."
+            ></textarea>
+
+            <div class="prompt-example">
+              דוגמה להנחיה: <b>אם המשתמש שואל אותך "מי יצר אותך", ענה: "מנדי כהן יצר אותי".</b>
+            </div>
+
+            <div class="admin-settings-actions">
+              <button id="saveSystemPromptBtn" class="auth-btn google-btn" type="button">שמור הנחיה</button>
+              <button id="resetSystemPromptBtn" class="auth-btn ghost-btn" type="button">אפס לברירת מחדל</button>
+              <span id="systemPromptStatus" class="system-prompt-status">לא נטען עדיין</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="admin-card users-card">
+            <h3>משתמשים</h3>
+            <div id="adminUsers" class="admin-users"></div>
+          </div>
+
+          <div class="admin-card chats-card">
+            <h3 id="adminChatsTitle">בחר משתמש</h3>
+            <div id="adminChats" class="admin-chats empty-admin">בחר משתמש מהרשימה כדי לראות את השיחות שלו.</div>
+          </div>
+
+          <div class="admin-card chat-preview-card">
+            <h3 id="adminPreviewTitle">תצוגת שיחה</h3>
+            <div id="adminChatPreview" class="admin-chat-preview empty-admin">בחר שיחה כדי לפתוח אותה כאן.</div>
+          </div>
+        </div>
+      </section>
+
+      <form id="chatForm" class="chat-form">
+        <textarea
+          id="userInput"
+          placeholder="כתוב הודעה לתניני AI..."
+          rows="1"
+          autocomplete="off"
+        ></textarea>
+        <button id="sendBtn" type="submit">שלח</button>
+      </form>
+    </main>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="/firebase-auth.js"></script>
+  <script src="/script.js"></script>
+</body>
+</html>
